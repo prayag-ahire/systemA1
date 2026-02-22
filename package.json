@@ -1,0 +1,30 @@
+{
+  "name": "systema1",
+  "version": "1.0.0",
+  "description": "distribution system that orchestration engine.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prayag-ahire/systemA1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/prayag-ahire/systemA1/issues"
+  },
+  "homepage": "https://github.com/prayag-ahire/systemA1#readme",
+  "dependencies": {
+    "@prisma/client": "^7.4.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "prisma": "^7.4.1"
+  }
+}
