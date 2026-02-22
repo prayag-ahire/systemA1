@@ -2,6 +2,7 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
 import { TaskSchema } from "./schemas/task";
+import prisma from "./lib/prisma";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,20 @@ app.get("/task", async (req, res) => {
     }
 })
 
+app.get("/task/:id", async (req, res) => {
+    try {
+        const tasks = await prisma?.task.findUnique({
+            where: { id: req.params.id }
+        })
+
+        if (!tasks) return res.status(404).json({ error: "Task not found" });
+        return res.json(tasks);
+
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error" })
+    }
+})
+
 app.post("/task", async (req, res) => {
     try {
         const validated = TaskSchema.safeParse(req.body);
@@ -37,13 +52,14 @@ app.post("/task", async (req, res) => {
                 details: validated.error.flatten(),
             });
         }
-        const { id, type, payload, runAt, maxAttempts, dependsOn } = validated.data;
+        const { id, type, payload, durationMs, runAt, maxAttempts, dependsOn } = validated.data;
 
         const task = await prisma.task.create({
             data: {
                 id,
                 type,
                 payload,
+                durationMs,
                 runAt: runAt ? new Date(runAt) : new Date(),
                 maxAttempts: maxAttempts ?? 3,
                 status: "QUEUED",
@@ -61,4 +77,6 @@ app.post("/task", async (req, res) => {
     }
 })
 
-
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
