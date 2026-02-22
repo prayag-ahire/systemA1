@@ -1,5 +1,15 @@
 let isShuttingDown = false;
 
+async function executeTask() {
+    await new Promise((resolve) => {
+        const num = Math.random() * 1000
+        if (num > 8000) {
+            throw new Error("task fail")
+        }
+        setTimeout(resolve, 1000)
+    })
+}
+
 async function worker() {
     while (!isShuttingDown) {
         try {
