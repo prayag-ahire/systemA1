@@ -1,15 +1,12 @@
 {
   "name": "systema1",
   "version": "1.0.0",
-  "description": "distribution system that orchestration engine.",
+  "description": "distribution task scheduler system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server": "tsx --env-file=.env src/server.ts",
     "worker": "tsx --env-file=.env src/system.ts",
-    "seed-tasks": "tsx --env-file=.env src/seed.ts",
     "monitor-tasks": "tsx --env-file=.env src/test-status.ts",
-    "add-task": "tsx --env-file=.env src/add-task.ts",
     "stress-test": "tsx --env-file=.env src/stress-test.ts"
   },
   "repository": {
