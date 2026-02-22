@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const Limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
-    message: "Too many request, please try again later.",
+    message: "Too many request please try again later",
 });
 
 app.use(Limiter);
@@ -56,14 +56,14 @@ app.post("/task", async (req, res) => {
 
         const task = await prisma.task.create({
             data: {
-                id,
+                id: id ?? crypto.randomUUID(),
                 type,
                 payload,
                 durationMs,
-                runAt: runAt ? new Date(runAt) : new Date(),
-                maxAttempts: maxAttempts ?? 3,
                 status: "QUEUED",
-                dependents: dependsOn ? {
+                maxAttempts: maxAttempts ?? 3,
+                runAt: runAt ? new Date(runAt) : new Date(),
+                dependencies: dependsOn ? {
                     create: dependsOn.map(depId => ({
                         dependsOnId: depId
                     }))
