@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed-tasks": "node scripts/seed-tasks.js"
+    "server": "tsx --env-file=.env src/server.ts",
+    "worker": "tsx --env-file=.env src/system.ts",
+    "seed-tasks": "tsx --env-file=.env src/seed.ts",
+    "monitor-tasks": "tsx --env-file=.env src/test-status.ts",
+    "add-task": "tsx --env-file=.env src/add-task.ts",
+    "stress-test": "tsx --env-file=.env src/stress-test.ts"
   },
   "repository": {
     "type": "git",
@@ -20,13 +25,18 @@
   },
   "homepage": "https://github.com/prayag-ahire/systemA1#readme",
   "dependencies": {
-    "@prisma/client": "^7.4.1",
+    "@prisma/client": "^5.10.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "cors": "^2.8.6",
+    "dotenv": "^16.4.5",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
-    "prisma": "^7.4.1",
+    "prisma": "^5.10.0",
     "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "tsx": "^4.21.0"
   }
 }

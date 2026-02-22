@@ -107,6 +107,7 @@
     "dist"
   ],
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "prisma.config.ts"
   ]
 }

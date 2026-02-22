@@ -25,7 +25,7 @@ const shutdown = async () => {
     console.log("Worker is shutting down gracefully");
 
     setTimeout(async () => {
-        console.log("Closing database connection...");
+        console.log("Closing database connection");
         await prisma.$disconnect();
         console.log("Exit");
         process.exit(0);
