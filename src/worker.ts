@@ -3,14 +3,15 @@ import { handleFailure } from "./handleFailure";
 import { sleep } from "./execut";
 import { executeWithTracking } from "./execut";
 
-export let isShuttingDown = false;
-export const setShuttingDown = (val: boolean) => { isShuttingDown = val; };
+export const workerState = {
+    isShuttingDown: false
+};
 
 const MAX_CONCURRENT_TASKS = 3;
 let runningCount = 0;
 
 export const worker = async () => {
-    while (!isShuttingDown) {
+    while (!workerState.isShuttingDown) {
         try {
             if (runningCount >= MAX_CONCURRENT_TASKS) {
                 await sleep(500);

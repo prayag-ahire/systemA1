@@ -1,12 +1,12 @@
 import prisma from "./lib/prisma";
 
 export const cleanup = async () => {
-    const savenDays = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const sevenDays = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     try {
         const deleted = await prisma.task.deleteMany({
             where: {
                 status: { in: ["COMPLETED", "FAILED"] },
-                createdAt: { lt: savenDays }
+                createdAt: { lt: sevenDays }
             }
         })
         if (deleted.count > 0) {

@@ -1,6 +1,6 @@
 import { recoverStuckTasks } from "./recoverStuckTask";
 import { cleanup } from "./cleanup";
-import { worker, isShuttingDown, setShuttingDown } from "./worker";
+import { worker, workerState } from "./worker";
 import prisma from "./lib/prisma";
 
 export const bootstrap = async () => {
@@ -20,8 +20,8 @@ bootstrap().catch((err) => {
 
 const shutdown = async () => {
 
-    if (isShuttingDown) return;
-    setShuttingDown(true);
+    if (workerState.isShuttingDown) return;
+    workerState.isShuttingDown = true;
     console.log("Worker is shutting down gracefully");
 
     setTimeout(async () => {
