@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TaskStatus {
+  WAITING
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+
+model Task {
+  id                     String      @id
+  type                   String
+  durationMs             Int
+  status                 TaskStatus  @default(WAITING)
+  remainingDependencies  Int
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  
+  dependencies           TaskDependency[] @relation("task")
+  dependents             TaskDependency[] @relation("dependsOn")
+
+  @@index([status])
+}
+
+model TaskDependency {
+  taskId     String
+  dependsOnId String
+
+  task       Task @relation("task", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOn  Task @relation("dependsOn", fields: [dependsOnId], references: [id], onDelete: Cascade)
+
+  @@id([taskId, dependsOnId])
+  @@index([dependsOnId])
+}
+
