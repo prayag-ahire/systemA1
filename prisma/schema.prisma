@@ -13,17 +13,22 @@ datasource db {
 }
 
 model Task {
-  id                                              String           @id
-  type                                            String
-  durationMs                                      Int
-  status                                          TaskStatus       @default(WAITING)
-  remainingDependencies                           Int
-  createdAt                                       DateTime         @default(now())
-  updatedAt                                       DateTime         @updatedAt
-  TaskDependency_TaskDependency_dependsOnIdToTask TaskDependency[] @relation("TaskDependency_dependsOnIdToTask")
-  TaskDependency_TaskDependency_taskIdToTask      TaskDependency[] @relation("TaskDependency_taskIdToTask")
+  id           String           @id @default(uuid())
+  type         String
+  payload      Json
+  durationMs   Int
+  timeoutMs    Int              @default(300000)
+  status       TaskStatus       @default(QUEUED)
+  runAt        DateTime         @default(now())
+  attempts     Int              @default(0)
+  maxAttempts  Int              @default(3)
+  startedAt    DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  dependencies TaskDependency[] @relation("TaskDependency_dependsOnIdToTask")
+  dependents   TaskDependency[] @relation("TaskDependency_taskIdToTask")
 
-  @@index([status])
+  @@index([status, runAt])
 }
 
 model TaskDependency {
@@ -37,7 +42,6 @@ model TaskDependency {
 }
 
 enum TaskStatus {
-  WAITING
   QUEUED
   RUNNING
   COMPLETED
