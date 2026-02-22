@@ -51,13 +51,36 @@ async function worker() {
                     data: { status: "COMPLETED", startedAt: null },
                 });
             } catch (error) {
-                await prisma.task.update({
-                    where: { id: task.id },
-                    data: { status: "FAILED", startedAt: null },
-                });
+
+                const nextAttempt = task.attempts + 1;
+
+                if (nextAttempt >= task.maxAttempts) {
+                    await prisma.task.update({
+                        where: { id: task.id },
+                        data: {
+                            status: "FAILED",
+                            attempts: nextAttempt,
+                            startedAt: null
+                        },
+                    });
+                } else {
+                    const backoffSec = Math.pow(2, nextAttempt);
+                    const nextRunAt = new Date(Date.now() + backoffSec * 1000);
+
+                    await prisma.task.update({
+                        where: { id: task.id },
+                        data: {
+                            status: "QUEUED",
+                            attempts: nextAttempt,
+                            runAt: nextRunAt,
+                            startedAt: null
+                        },
+                    });
+                }
             }
-        } catch {
+        } catch (error) {
             await new Promise((resolve) => setTimeout(resolve, 5000));
         }
     }
 }
+
