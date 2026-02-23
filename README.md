@@ -53,3 +53,6 @@ repo - https://github.com/prayag-ahire/systemB1
 
 -   i have set the limit to concurrency of worker so it will not take more then 100 task at a time and prevent the DB pressure and CPU waste and server crash
 
+## the node js is single thrieded so this is just simulation of distributed task scheduler system 
+
+## to make it more optimize we need to go more deep into system programming and use multi-threading and multi-processing
